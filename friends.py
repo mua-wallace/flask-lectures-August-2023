@@ -12,7 +12,7 @@ class Friend:
     # Now we use class methods to query our database
     @classmethod
     def get_all_friends(cls):
-        query = "SELECT * FROM friends;"
+        query = "SELECT * FROM friends LIMIT 5;"
         # make sure to call the connectToMySQL function with the schema you are targeting.
         results = connectToMySQL('first_flask').query_db(query)
         # Create an empty list to append our instances of friends
@@ -20,7 +20,9 @@ class Friend:
         # Iterate over the db results and create instances of friends with cls.
         for friend in results:
             friends.append(cls(friend))
-            print('*'*100)
-            print(friend)
         return friends
-            
+    # method to save colleted data from friend
+    @classmethod
+    def save(cls, data):
+        query = "INSERT INTO friends (first_name,last_name, occupation, create_at, updated_at) VALUES(%(first_name)s, %(last_name)s, %(occupation)s, NOW(), NOW());"
+        return connectToMySQL('first_flask').query_db(query, data)
