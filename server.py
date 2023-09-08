@@ -41,6 +41,42 @@ def create_friend():
     Friend.save(data)
     return redirect('/')
 
+# actions -show friend's details
+@app.route('/friend/details/<int:friend_id>')
+def show_details(friend_id):
+    data = {
+        "id": friend_id
+    }
+    friend_details = Friend.get_one(data)
+    return render_template('actions/details.html', details =friend_details)
+
+@app.route('/friend/edit/<int:friend_id>')
+def edit_details(friend_id):
+    data = {
+        "id": friend_id
+    }
+    friend_details = Friend.get_one(data)
+    return render_template('actions/edit.html', details =friend_details)
+
+
+@app.route('/friend/update', methods=["POST"])
+def update_details():
+    data = {
+        'id': request.form['id'],
+        'first_name': request.form['fname'],
+        'last_name': request.form['lname'],
+        'occupation': request.form['occ']
+    }
+    Friend.update(data)
+    return redirect('/')
+
+@app.route('/friend/remove/<int:friend_id>')
+def delete_friend(friend_id):
+    data = {
+        'id': friend_id
+    }
+    Friend.remove(data)
+    return  redirect('/')
 
 if __name__ == '__main__':
     app.run(debug=True, host="localhost", port=8000)
